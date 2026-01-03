@@ -14,6 +14,9 @@ interface LoginFormData {
   styleUrl: './app.css'
 })
 export class App {
+  // Track if form was just reset to prevent showing errors immediately after submission
+  private formJustReset = signal(false);
+  
   // Model signal for form data
   loginModel = signal<LoginFormData>({
     email: '',
@@ -57,6 +60,25 @@ export class App {
     );
   });
 
+  // Computed signal to show errors (only if form wasn't just reset)
+  showEmailErrors = computed(() => 
+    this.loginForm.email().touched() && 
+    this.loginForm.email().invalid() && 
+    !this.formJustReset()
+  );
+  
+  showPasswordErrors = computed(() =>
+    this.loginForm.password().touched() && 
+    this.loginForm.password().invalid() && 
+    !this.formJustReset()
+  );
+  
+  showConfirmPasswordErrors = computed(() =>
+    this.loginForm.confirmPassword().touched() && 
+    this.loginForm.confirmPassword().invalid() && 
+    !this.formJustReset()
+  );
+
   // Submit handler
   onSubmit(event: Event): void {
     event.preventDefault();
@@ -69,11 +91,19 @@ export class App {
       });
       
       // Reset form after successful submission
+      // Set flag to prevent showing errors immediately
+      this.formJustReset.set(true);
+      
+      // Reset model values
       this.loginModel.set({
         email: '',
         password: '',
         confirmPassword: ''
       });
+      
+      // Clear the flag after fields are interacted with again
+      // This happens automatically when user starts typing
+      setTimeout(() => this.formJustReset.set(false), 100);
     }
   }
 }

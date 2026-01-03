@@ -115,4 +115,33 @@ describe('App - Login Form Flow Tests', () => {
 
     consoleSpy.mockRestore();
   });
+
+  it('should not show validation errors immediately after successful submission', () => {
+    const emailInput = compiled.querySelector('#email') as HTMLInputElement;
+    const passwordInput = compiled.querySelector('#password') as HTMLInputElement;
+    const confirmPasswordInput = compiled.querySelector('#confirmPassword') as HTMLInputElement;
+    const form = compiled.querySelector('form') as HTMLFormElement;
+
+    // Fill form with valid data
+    emailInput.value = 'user@example.com';
+    emailInput.dispatchEvent(new Event('input'));
+    passwordInput.value = 'Password123!';
+    passwordInput.dispatchEvent(new Event('input'));
+    confirmPasswordInput.value = 'Password123!';
+    confirmPasswordInput.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    // Submit form
+    const submitEvent = new Event('submit', { cancelable: true });
+    form.dispatchEvent(submitEvent);
+    fixture.detectChanges();
+
+    // Verify form is reset
+    expect(component.loginModel().email).toBe('');
+    
+    // Verify no validation errors are shown despite fields being touched and empty
+    expect(compiled.textContent).not.toContain('Email is required');
+    expect(compiled.textContent).not.toContain('Password is required');
+    expect(compiled.textContent).not.toContain('Please confirm your password');
+  });
 });

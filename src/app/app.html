@@ -19,7 +19,7 @@
             class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             placeholder="Email address"
           />
-          @if (loginForm.email().touched() && loginForm.email().invalid()) {
+          @if (showEmailErrors()) {
             <div class="mt-1">
               @for (error of loginForm.email().errors(); track error.kind) {
                 <p class="text-sm text-red-600">{{ error.message }}</p>
@@ -40,7 +40,7 @@
             class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             placeholder="Password"
           />
-          @if (loginForm.password().touched() && loginForm.password().invalid()) {
+          @if (showPasswordErrors()) {
             <div class="mt-1">
               @for (error of loginForm.password().errors(); track error.kind) {
                 <p class="text-sm text-red-600">{{ error.message }}</p>
@@ -61,7 +61,7 @@
             class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             placeholder="Confirm Password"
           />
-          @if (loginForm.confirmPassword().touched() && loginForm.confirmPassword().invalid()) {
+          @if (showConfirmPasswordErrors()) {
             <div class="mt-1">
               @for (error of loginForm.confirmPassword().errors(); track error.kind) {
                 <p class="text-sm text-red-600">{{ error.message }}</p>
